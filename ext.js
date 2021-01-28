@@ -1,5 +1,6 @@
 let rows = null;
 let showAll = true;
+let selectedTeams = new Set();
 
 function getAppSpinner() {
   return document.querySelector('app-spinner');
@@ -73,11 +74,23 @@ function setupControlsBar() {
 function addSelectCheckboxes() {
   rows.forEach(row => {
     const teamCol = row.querySelector('.team-col');
+    const teamNameDiv = teamCol.querySelector('.hidden-lg-down');
+    const teamName = teamNameDiv ? teamNameDiv.innerText : '';
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('select-row');
+    if (selectedTeams.has(teamName)) {
+      checkbox.checked = true;
+      row.classList.add('selected');
+    }
+
     checkbox.addEventListener('change', () => {
-      row.classList.toggle('selected');
+      const selected = row.classList.toggle('selected');
+      if (selected) {
+        selectedTeams.add(teamName);
+      } else {
+        selectedTeams.delete(teamName);
+      }
     });
     teamCol.prepend(checkbox);
   });
