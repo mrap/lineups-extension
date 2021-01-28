@@ -1,0 +1,11 @@
+.select-row {
+  margin-right: 2em;
+  vertical-align: middle;
+  cursor: pointer;
+  width: 1.6em;
+  height: 1.6em;
+}
+
+.multi-row-data-table.selected-only tr.t-content:not(.selected) {
+  display: none;
+}
