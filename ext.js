@@ -1,7 +1,3 @@
-/*
- * 1. For each row, put a button that will mark the row as 'selected'
- */
-
 let rows = null;
 let showAll = true;
 
