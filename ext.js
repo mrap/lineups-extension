@@ -5,6 +5,10 @@
 let rows = null;
 let showAll = true;
 
+function getAppSpinner() {
+  return document.querySelector('app-spinner');
+}
+
 function getTable() {
   return document.querySelector('.multi-row-data-table');
 }
@@ -88,12 +92,39 @@ function initExt() {
   addSelectCheckboxes();
 }
 
-// Wait for rows to load
-let loadInterval = setInterval(() => {
-  rows = getRows();
-  if (rows && rows.length > 0) {
-    clearInterval(loadInterval);
-    loadInterval = null;
-    initExt();
+function loadSelectControls() {
+  // Wait for rows to load
+  let loadInterval = setInterval(() => {
+    rows = getRows();
+    if (rows && rows.length > 0) {
+      clearInterval(loadInterval);
+      loadInterval = null;
+      initExt();
+    }
+  }, 200);
+}
+
+let observer = new MutationObserver(mutations => {
+  if (!mutations || mutations.length === 0) return;
+  const mutation = mutations[0];
+  if (mutation.removedNodes) {
+    // Loading finished
+    loadSelectControls();
   }
-}, 200);
+});
+
+function waitForLoad() {
+  let spinnerInterval = setInterval(() => {
+    let appSpinner = getAppSpinner();
+    if (appSpinner) {
+      clearInterval(spinnerInterval);
+      spinnerInterval = null;
+      loadSelectControls();
+      observer.observe(appSpinner, {
+        childList: true,
+      });
+    }
+  }, 200);
+}
+
+waitForLoad();
