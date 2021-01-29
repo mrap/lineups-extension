@@ -25,7 +25,13 @@ function createToggleBtn(label) {
   return toggleBtn;
 }
 
+const TOGGLE_GROUP_CLASS = 'show-selected-toggle';
 function createToggleGroup() {
+  const existing = document.querySelector(`.${TOGGLE_GROUP_CLASS}`);
+  if (existing) {
+    existing.remove();
+  }
+
   const group = document.createElement('div');
   group.classList.add('toggles-in-page-group', 'btn-group', 'toggles-group');
   const allBtn = createToggleBtn('All');
@@ -59,7 +65,7 @@ function createToggleGroup() {
   group.append(allBtn, selectedBtn);
 
   const wrapper = document.createElement('div');
-  wrapper.classList.add('toggles-in-page-wrapper', 'm-0');
+  wrapper.classList.add('toggles-in-page-wrapper', 'm-0', TOGGLE_GROUP_CLASS);
   wrapper.append(group);
 
   return wrapper;
@@ -76,6 +82,12 @@ function addSelectCheckboxes() {
     const teamCol = row.querySelector('.team-col');
     const teamNameDiv = teamCol.querySelector('.hidden-lg-down');
     const teamName = teamNameDiv ? teamNameDiv.innerText : '';
+
+    // Only add checkbox if not yet present
+    if (teamCol.querySelector('.select-row')) {
+      return;
+    }
+
     const checkbox = document.createElement('input');
     checkbox.type = 'checkbox';
     checkbox.classList.add('select-row');
